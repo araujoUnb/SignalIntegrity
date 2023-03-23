@@ -238,6 +238,176 @@
 
 \end{frame}
 
+\begin{frame}
+  \frametitle{Example}
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.35\textwidth]{Fig/rail_collapse.png}
+    \caption{Measured Vcc voltage at three pin
+    locations on the package of a microprocessor just
+    coming from a “stop-clock” state. Nominal voltage is
+    supposed to be 2.5 V, but due to voltage drops in the
+    power distribution system, the delivered voltage
+    collapses by almost 125 mV.}
+  \end{figure}
+
+\end{frame}
+\section{Electromagnetic Interference}
+
+
+\begin{frame}
+  \frametitle{Understanding the concept}
+
+  \begin{block}{Definition}
+    Electromagnetic interference (EMI) is a phenomenon where unwanted electromagnetic signals or noise disrupt the proper functioning of an electronic system, causing a degradation of signal integrity.
+  \end{block}
+
+  \begin{block}{Consequencies}
+    \begin{itemize}
+      \item Introduce noise
+      \item Distortions
+      \item Signal loss
+    \end{itemize}
+  \end{block}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{How noise is related to EMI}
+
+  \begin{block}{Radiated Coupling}
+    Electromagnetic waves radiated by a source, such as a transmitter or electronic device, can induce voltage and current fluctuations in nearby conductors, traces, or circuits
+  \end{block}
+  \begin{block}{Conducted Emissions}
+    Noise can also be generated through conductive pathways, such as power supply lines, ground planes, or signal lines. In this case, EMI propagates directly through these conductive paths and introduces noise into the system
+  \end{block}
+  \begin{block}{Capacitive Coupling}
+    When two conductors are in close proximity, an electric field can form between them, creating a capacitance. Changes in voltage across one conductor can induce a change in the voltage across the other conductor due to this capacitance, leading to noise coupling between the two conductors.
+  \end{block}
+  \begin{block}{Inductive coupling}
+    Similar to capacitive coupling, inductive coupling occurs when two conductors are in close proximity, but in this case, it's a magnetic field that forms between them, creating mutual inductance. 
+  \end{block}
+  \begin{block}{Common impedance coupling}
+    This type of coupling occurs when two or more circuits share a common impedance, such as a ground plane or power supply rail. 
+  \end{block}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Radiated Emissions }
+
+  \begin{block}{Start point}
+    Let's examine the coupling between a radiating source and a receiving conductor (such as an antenna, trace, or wire) using Faraday's law of electromagnetic induction.
+  \end{block}
+
+  $$
+  EMF = - \frac{\partial \Phi(t)}{\partial t},
+  $$
+  where $\Phi(t) = \int _{\mathcal{A}} H(t) dA $ is the magnetic flux.
+
+  \begin{block}{Scenario}
+    EMI source that generates an electromagnetic wave with an electric field $E(t)$ and a magnetic field $H(t)$ radiating outward.When these fields interact with a nearby conductor
+    $$
+    V_{induced}(t) = - \frac{\partial \Phi(t)}{\partial t},
+    $$
+  \end{block}
+  \begin{block}{Radiated signal}
+    $$
+    H_{source}(t) = H_0 \sin {(2 \pi f_0 t + \phi(x,y,z) )} \rightarrow \Phi(t) = \int _{\mathcal{A}} H_0 \sin {(2 \pi f_0 t + \phi(x,y,z))} dA  
+    $$    
+  \end{block}
+\end{frame}
+
+
+
+
+
+\begin{frame}
+    \frametitle{Conducted Emissions}
+  \begin{block}{Example}
+    Suppose there's an electronic device with a power supply voltage $V_{source(t)}$ and a load impedance $Z_{load}$. The electronic device generates noise voltage $V_{noise(t)}$ due to its internal operation, such as switching components or high-frequency oscillators. The total voltage across the device, including the noise, can be represented as:
+
+$$V_{total(t)} = V_{source(t)} + V_{noise(t)}$$
+
+Now, let's consider another electronic device connected to the same power supply line, with an input impedance $Z_{input}$. The conducted noise from the first device can couple into the second device through the shared power supply line.
+
+The total current flowing through the power supply line can be calculated using Kirchhoff's current law:
+
+$$I_{total(t)} = I_{load(t)} + I_{input(t)}$$
+  \end{block}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Mathematically analysis}
+
+  \begin{itemize}
+    \item Total voltage across the first device:
+      \[
+        V_\text{total}(t) = V_\text{source}(t) + V_\text{noise}(t)
+      \]
+    \item Currents through load and input impedances:
+      \[
+        I_\text{load}(t) = \frac{V_\text{total}(t)}{Z_\text{load}} = \frac{V_\text{source}(t) + V_\text{noise}(t)}{Z_\text{load}}
+      \]
+      \[
+        I_\text{input}(t) = \frac{V_\text{total}(t)}{Z_\text{input}} = \frac{V_\text{source}(t) + V_\text{noise}(t)}{Z_\text{input}}
+      \]
+    \item Total current in the power supply line:
+      \[
+        I_\text{total}(t) = (V_\text{source}(t) + V_\text{noise}(t))\left(\frac{1}{Z_\text{load}} + \frac{1}{Z_\text{input}}\right)
+      \]
+    \item Voltage drop across power supply line:
+      \[
+        V_\text{drop}(t) = I_\text{total}(t) \cdot Z_\text{line}
+      \]
+    \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+
+  \begin{itemize}
+    \item Conducted noise in the second device:
+    \[
+      V_\text{noise\_conducted}(t) = V_\text{noise}(t) \cdot \left(\frac{1}{Z_\text{load}} + \frac{1}{Z_\text{input}}\right) \cdot Z_\text{line}
+    \]
+  \end{itemize}
+
+  \begin{block}{NOTE}
+    This equation demonstrates how conducted emissions can propagate through a power supply line and couple noise from one device to another. 
+  \end{block}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Capacite Coupling}
+
+  \begin{itemize}
+    \item Assume there are two conductors, A and B, in close proximity. An electric field forms between them, resulting in a capacitance $C_{AB}$.
+    \item Conductor A carries a signal voltage $V_{A}(t)$ and an unwanted noise voltage $V_{noise}(t)$ due to EMI. The total voltage across conductor A can be represented as:
+    
+    $$V_{total}(t) = V_{A}(t)+ V_{noise}(t)$$
+
+    \item The capacitance between the conductors, $C_{AB}$, causes a charge to accumulate on both conductors proportional to their voltage difference. According to the capacitance equation:
+
+    $$Q = C_{AB} * (V_{total}(t)  - V_{B}(t))$$
+
+    \item The rate of change of charge with respect to time is equal to the current flowing between the conductors
+    $$I_{AB}(t) = C_{AB}* \frac{\partial (V_{total}(t)  - V_{B}(t))}{\partial t}$$
+    \item As the noise voltage $V_{noise}(t)$ changes, it induces a current $I_{AB}(t)$ to flow between the conductors. This current, in turn, affects the voltage across conductor B.
+  \end{itemize}
+
+\end{frame}
+
+
+
 \section{Simulation tools}
 
 \begin{frame}
